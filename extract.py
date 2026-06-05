@@ -1,6 +1,6 @@
 import requests
 def get_coin_data():
-	url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd'
+	url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1'
 	
 	try:
 		#Make a GET request to the API endpoint using requests.get()
