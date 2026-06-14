@@ -60,6 +60,7 @@ venv.bak/
 
 #Data Logs
 /logs
+*.log
 
 #macOS Specifics:
 .DS_Store

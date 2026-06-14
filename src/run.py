@@ -3,6 +3,12 @@ from load import load_data
 import psycopg2
 import os
 from dotenv import load_dotenv
+import datetime
+from datetime import date
+today_date = date.today().strftime('%Y%m%d')
+import logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename= f'logs/pipeline_{today_date}.log', encoding='utf-8', level=logging.INFO, format='%(asctime)s %(name)s %(funcName)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 # Read database credentials from the .env file into the environment.
 load_dotenv()
@@ -27,10 +33,11 @@ def run_transform():
 		cursor = connection.cursor()
 		cursor.execute(data)
 		connection.commit()
-		print(f"Successfully loaded {cursor.rowcount} metrics into PostgreSQL DB.")
+		logger.info(f'Successfully loaded {cursor.rowcount} metrics into PostgreSQL DB.')
+
 			
 	except psycopg2.Error as e:
-		print(f"Database error: {e}")
+		logger.error(f'Database error: {e}')
 		if connection:
 			connection.rollback()
 

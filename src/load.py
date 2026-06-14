@@ -4,6 +4,8 @@ import psycopg2
 from datetime import date
 import os
 from dotenv import load_dotenv
+import logging
+logger = logging.getLogger(__name__)
 
 # Read database credentials from the .env file into the environment.
 load_dotenv()
@@ -43,11 +45,11 @@ def load_data(coins_data):
 
 		# Commit only after all rows have been inserted successfully.
 		connection.commit()
-		print(f"Successfully loaded {len(coins_data)} coins into PostgreSQL DB.")
+		logger.info(f'Successfully loaded {len(coins_data)} coins into PostgreSQL DB.')
 
 	except psycopg2.Error as e:
 		# Roll back the whole batch so a partial load is never persisted.
-		print(f"Database error: {e}")
+		logger.error(f'Database error {e}')
 		if connection:
 			connection.rollback()
 

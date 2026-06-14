@@ -1,6 +1,8 @@
 """Extract stage of the pipeline: fetches market data from the CoinGecko API."""
 
 import requests
+import logging
+logger = logging.getLogger(__name__)
 
 
 def get_coin_data():
@@ -20,7 +22,7 @@ def get_coin_data():
 
 	except requests.exceptions.RequestException as e:
 		# Covers connection errors, timeouts, and bad HTTP status codes.
-		print(f'Failed to fetch coin data from API: {e}')
+		logger.error(f'Failed to fetch coin data from API: {e}')
 		return None
 
 def main():
@@ -28,11 +30,11 @@ def main():
 	crypto_coins=get_coin_data()
 
 	if crypto_coins:
-		print(f'Successfully fetched {len(crypto_coins)} coins from the API.')
+		logger.info(f'Successfully fetched {len(crypto_coins)} coins from the API.')
 		print(crypto_coins)
 
 	else:
-		print('Failed to fetch coin data from API.')
+		logger.error('Failed to fetch coin data from API.')
 
 if __name__ == '__main__':
 	main()
