@@ -49,9 +49,15 @@ def run_transform():
 
 
 if __name__ == "__main__":
-	coins_data = get_coin_data()
-	load_data(coins_data)
-	run_transform()
+	try:
+		coins_data = get_coin_data()
+
+	except Exception as e:
+		logger.error(f'Extract failed, aborting pipeline: {e}')
+		exit(1)
+
+load_data(coins_data)
+run_transform()
 	
 
 

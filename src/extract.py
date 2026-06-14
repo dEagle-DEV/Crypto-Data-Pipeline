@@ -3,8 +3,14 @@
 import requests
 import logging
 logger = logging.getLogger(__name__)
+from tenacity import retry, stop_after_attempt,wait_exponential,before_sleep_log,retry_if_exception_type
 
-
+@retry(
+		stop=stop_after_attempt(4),
+		wait=wait_exponential(multiplier=1, min=1, max=4),
+		before_sleep=before_sleep_log(logger, logging.WARNING),
+		retry=retry_if_exception_type(requests.exceptions.RequestException)
+)
 def get_coin_data():
 	"""Fetch the top coins by market cap from CoinGecko.
 
@@ -23,11 +29,15 @@ def get_coin_data():
 	except requests.exceptions.RequestException as e:
 		# Covers connection errors, timeouts, and bad HTTP status codes.
 		logger.error(f'Failed to fetch coin data from API: {e}')
-		return None
+		raise
 
 def main():
-	# Standalone entry point for testing the extract step on its own.
-	crypto_coins=get_coin_data()
+	try:
+		crypto_coins=get_coin_data()
+	
+	except Exception as e:
+		logger.error(f'All retries exhausted, giving up: {e}')
+		return
 
 	if crypto_coins:
 		logger.info(f'Successfully fetched {len(crypto_coins)} coins from the API.')
