@@ -36,3 +36,14 @@ CREATE TABLE prices(
     PRIMARY KEY (coin_id, snapshot_date),
     FOREIGN KEY (coin_id) REFERENCES coins(id)
 );
+
+CREATE TABLE coin_metrics(
+    coin_id                 text NOT NULL,     -- Foreign key reference to coins and prices table
+    snapshot_date           date NOT NULL,     -- Date when the metrics were calculated
+    daily_pct_change        numeric,           -- Daily percentage change in price
+    moving_avg_7d           numeric,           -- 7-day moving average price
+    daily_volatility        numeric,           -- Daily price volatility measure
+
+    PRIMARY KEY (coin_id, snapshot_date),
+    FOREIGN KEY (coin_id, snapshot_date) REFERENCES prices(coin_id, snapshot_date)
+);
