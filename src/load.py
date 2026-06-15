@@ -45,7 +45,7 @@ def load_data(coins_data):
 
 		# Commit only after all rows have been inserted successfully.
 		connection.commit()
-		logger.info(f'Successfully loaded {len(coins_data)} coins into PostgreSQL DB.')
+		logger.info(f'Processed {len(coins_data)} coins.')
 
 	except psycopg2.Error as e:
 		# Roll back the whole batch so a partial load is never persisted.

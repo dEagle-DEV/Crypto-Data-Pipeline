@@ -1,5 +1,6 @@
 from extract import get_coin_data
 from load import load_data
+from checks import run_checks
 import psycopg2
 import os
 from dotenv import load_dotenv
@@ -58,6 +59,7 @@ if __name__ == "__main__":
 
 load_data(coins_data)
 run_transform()
+run_checks()
 	
 
 
